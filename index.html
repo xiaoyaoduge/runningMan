@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="js/hitPix.js"></script>
+    <script src="js/game.js"></script>
+</head>
+<style>
+    *{
+        box-sizing: border-box;
+    }
+    html,body{
+        margin: 0;padding: 0;width: 100%;height: 100%;overflow: hidden;
+        position: relative;
+    }
+    #canvas1{
+        position: absolute;left: 0;top: 0;
+        /*background-color: dodgerblue;*/
+        /*border-bottom: 5px solid #333;background: #ccc;*/
+        /*background: url(img1/earth.png) repeat-x center 100px;*/
+    }
+    #canvas2{
+        position: absolute;left: 0;bottom: 0;
+        /*border-bottom: 5px solid #333;background: #ccc;*/
+    }
+    .end{
+        width: 100%;height: 100%;background: #fff;position: absolute;
+        left: 0;right: 0;top: 0;bottom: 0;margin: auto;z-index: 100;
+        display: none;line-height: 150px;text-align: center;
+        border: 1px solid #666;
+    }
+    .end h1{
+        font-size: 40px;
+    }
+    .end h1 .span{
+        font-size: 50px;color: red;
+    }
+    .start{
+        width: auto;height: auto;position: absolute;right: 5%;top: 8%;z-index: 100;
+        font-size: 30px;
+    }
+    .rest{
+        width: 150px;height: 50px;font-size: 30px;line-height: 50px;background: #ccc;
+        cursor: pointer;position: absolute;left: 0;margin: auto;right: 0;
+    }
+    .good{
+        width: 100%;height: 100%;background: #ccc;z-index: 100;position: relative;
+    }
+    .gogo{
+        width: 200px;height: 50px;position: absolute;left: 0;right: 0;margin: auto;
+        bottom: 10%;font-size: 30px;color: #111;cursor: pointer;text-align: center;
+    }
+    .go{
+        width:800px;height: 100px;position: absolute;left: 0;right: 0;margin: auto;
+        top: 15%;font-size: 80px;color: #111;cursor: pointer;text-align: center;
+    }
+    .person{
+        width: 400px;height: 200px;position: absolute;
+        left: 0;right: 0;margin: auto;top: 40%;
+    }
+    .p-left{
+        width: 120px;height: 100%;position: absolute;
+        top:0;left: 0;
+    }
+    .p-right{
+        width: 120px;height: 100%;position: absolute;
+        top:0;right: 0;
+    }
+</style>
+<body>
+<div class="good">
+    <div class="person">
+        <div class="p-left"><img src="img/nan.png" alt="" style="width: 100px;height: 120px"></div>
+        <div class="p-right"><img src="img/nv.png" alt="" style="width: 100px;height: 120px"></div>
+    </div>
+    <div class="go"><span style="font-size: 100px">一个</span>都不能<span style="color: red;font-size: 90px">撞</span></div>
+    <div class="gogo">开始游戏</div>
+</div>
+<canvas id="canvas1">
+    您的浏览器不支持画布，请更新浏览器！
+</canvas>
+<canvas id="canvas2">
+    您的浏览器不支持画布，请更新浏览器！
+</canvas>
+<div class="start"><span></span>
+</div>
+<div class="end">
+    <h1>恭喜你坚持了<span class="span"></span>秒！</h1>
+    <div class="rest">重新开始</div>
+</div>
+<img src="img/1.png" alt="" class="run" hidden>
+<img src="img/2.png" alt="" class="run" hidden>
+<img src="img/3.png" alt="" class="run" hidden>
+<img src="img/4.png" alt="" class="run" hidden>
+<img src="img/5.png" alt="" class="run" hidden>
+<img src="img/6.png" alt="" class="run" hidden>
+<img src="img/7.png" alt="" class="run" hidden>
+<img src="img/8.png" alt="" class="jump" hidden>
+<img src="img/to/1.png" alt="" class="runto" hidden>
+<img src="img/to/2.png" alt="" class="runto" hidden>
+<img src="img/to/3.png" alt="" class="runto" hidden>
+<img src="img/to/4.png" alt="" class="runto" hidden>
+<img src="img/to/5.png" alt="" class="runto" hidden>
+<img src="img/to/6.png" alt="" class="runto" hidden>
+<img src="img/to/7.png" alt="" class="runto" hidden>
+<img src="img/to/8.png" alt="" class="jumpto" hidden>
+<img src="img/11.png" alt="" class="hinder" hidden>
+<img src="img/22.png" alt="" class="hinder" hidden>
+<img src="img/33.png" alt="" class="hinder" hidden>
+<img src="img/44.png" alt="" class="hinder" hidden>
+<img src="img/55.png" alt="" class="hinder" hidden>
+<img src="img/66.png" alt="" class="hinder" hidden>
+<img src="img/77.png" alt="" class="hinder" hidden>
+<img src="img/88.png" alt="" class="hinder" hidden>
+<audio src="3.mp3"></audio>
+</body>
+<script>
+    window.onload=function () {
+        var gogo=document.querySelectorAll(".gogo")[0];
+        var good=document.querySelectorAll(".good")[0];
+        var audio=document.querySelectorAll("audio")[0];
+        gogo.onclick=function(){
+            audio.play()
+            good.style.display="none"
+            var start=document.querySelectorAll(".start")[0];
+            var end=document.querySelectorAll(".end")[0];
+            var span=document.querySelectorAll(".span")[0];
+            var interval, reg = /^\d$/,
+                    sum = 0;
+            var tt = setInterval(function() {
+                sum++;
+                var d = new Date("1111/1/1,0:0:0");
+                d.setSeconds(sum);
+                var h = d.getHours();
+                h = reg.test(h) ? "0" + h + ":" : h + ":"
+                var m = d.getMinutes();
+                m = reg.test(m) ? "0" + m + ":" : m + ":"
+                var s = d.getSeconds();
+                s = reg.test(s) ? "0" + s : s;
+                start.innerHTML = h + m + s;
+                span.innerHTML = m + s;
+            }, 20);
+
+
+
+
+
+
+            var canvas1=document.querySelector("#canvas1");
+            var cobj1=canvas1.getContext("2d");
+            var canvas2=document.querySelector("#canvas2");
+            var cobj2=canvas2.getContext("2d");
+            window.onresize=function() {
+                canvas1.width = document.documentElement.clientWidth;
+                canvas1.style.background="url(img/earth.png) repeat-x center "+(canvas1.height*2+20)+"px";
+                canvas1.height = document.documentElement.clientHeight/2;
+
+                canvas2.width = document.documentElement.clientWidth;
+                canvas2.style.background="url(img/earth.png) repeat-x center "+(canvas2.height*2+10)+"px";
+                canvas2.height = document.documentElement.clientHeight/2;
+
+            };
+            window.onresize();
+            var runImg1=document.querySelectorAll(".run");
+            var jumpImg1=document.querySelectorAll(".jump");
+            var runImg2=document.querySelectorAll(".runto");
+            var jumpImg2=document.querySelectorAll(".jumpto");
+            var hinderImg=document.querySelectorAll(".hinder");
+            var gameObj1=new game(canvas1,cobj1,runImg1,jumpImg1,hinderImg,end,tt,audio);
+            gameObj1.play();
+            var gameObj2=new game(canvas2,cobj2,runImg2,jumpImg2,hinderImg,end,tt,audio);
+            gameObj2.play();
+        }
+
+
+    }
+</script>
+</html>
